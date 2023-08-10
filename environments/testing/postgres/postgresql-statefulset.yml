@@ -3,8 +3,8 @@ kind: StatefulSet
 metadata:
   name: postgres
 spec:
-  serviceName: "postgres"
   replicas: 1
+  serviceName: postgres
   selector:
     matchLabels:
       app: postgres
@@ -13,39 +13,26 @@ spec:
       labels:
         app: postgres
     spec:
-      initContainers:
-        - name: init-db
-          image: postgres:13
-          command:
-          - "/bin/bash"
-          - "/etc/config/init-db.sh"
-          volumeMounts:
-            - name: init-db-scripts
-              mountPath: /etc/config
       containers:
-        - name: postgres
-          image: postgres:latest
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: kubernetes-secrets
-                  key: POSTGRES_PASSWORD
-          ports:
-            - containerPort: 5432
-          volumeMounts:
-            - name: postgres-data
-              mountPath: /var/lib/postgresql/data
-      volumes:  # Notice the corrected indentation here
-        - name: init-db-scripts
-          configMap:
-            name: postgres-init-db-scripts  # And here
+      - name: postgres
+        image: postgres:14
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-data
   volumeClaimTemplates:
-    - metadata:
-        name: postgres-data
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 15Gi
-        storageClassName: microk8s-hostpath
+  - metadata:
+      name: postgres-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 15Gi

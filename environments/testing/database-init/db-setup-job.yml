@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgres-setup
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: setup
+        image: postgres:14  # This image has the PostgreSQL client tools
+        command:
+        - /bin/bash
+        - -c
+        - |
+          # Wait for Postgres to be ready (this is a basic way, better would be to loop and check connection)
+          sleep 30
+          
+          # Run setup commands
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-service-name -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE USER myappuser WITH PASSWORD 'myapppassword';"
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-service-name -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE DATABASE myappdb;"
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-service-name -U $POSTGRES_USER -d $POSTGRES_DB -c "GRANT ALL PRIVILEGES ON DATABASE myappdb TO myappuser;"
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secrets
+              key: user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secrets
+              key: password
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secrets
+              key: db
