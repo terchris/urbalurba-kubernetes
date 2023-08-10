@@ -5,8 +5,7 @@ metadata:
   name: global-config
   namespace: urbalurba
 data:
+  POSTGRES_USER: postgres
   DATABASE_NAME: urbalurba_db
   DATABASE_USERNAME: strapi
-  PGADMIN_DEFAULT_EMAIL: your-email@example.com
-  PGADMIN_DEFAULT_PASSWORD: your-password
 # push to kubernetes using: microk8s kubectl apply -f common/shared-config/global-configmap.yml

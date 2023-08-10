@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: postgres-setup
+  namespace: urbalurba
 spec:
   template:
     spec:
@@ -13,26 +14,42 @@ spec:
         - /bin/bash
         - -c
         - |
-          # Wait for Postgres to be ready (this is a basic way, better would be to loop and check connection)
+          # Wait for Postgres to be ready
           sleep 30
           
-          # Run setup commands
-          PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-service-name -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE USER myappuser WITH PASSWORD 'myapppassword';"
-          PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-service-name -U $POSTGRES_USER -d $POSTGRES_DB -c "CREATE DATABASE myappdb;"
-          PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres-service-name -U $POSTGRES_USER -d $POSTGRES_DB -c "GRANT ALL PRIVILEGES ON DATABASE myappdb TO myappuser;"
+          # Check if user exists
+          if ! PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -tAc "SELECT 1 FROM pg_roles WHERE rolname='$DATABASE_USERNAME'" | grep -q 1; then
+            PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -c "CREATE USER $DATABASE_USERNAME WITH PASSWORD '$DATABASE_PASSWORD';"
+          fi
+          
+          # Check if database exists
+          if ! PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -tAc "SELECT 1 FROM pg_database WHERE datname='$DATABASE_NAME'" | grep -q 1; then
+            PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -c "CREATE DATABASE $DATABASE_NAME;"
+            PGPASSWORD=$POSTGRES_PASSWORD psql -h postgres -U $POSTGRES_USER -c "GRANT ALL PRIVILEGES ON DATABASE $DATABASE_NAME TO $DATABASE_USERNAME;"
+          fi
         env:
         - name: POSTGRES_USER
           valueFrom:
-            secretKeyRef:
-              name: postgres-secrets
-              key: user
+            configMapKeyRef:
+              name: global-config
+              key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secrets
-              key: password
-        - name: POSTGRES_DB
+              name: kubernetes-secrets
+              key: POSTGRES_PASSWORD
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_NAME
+        - name: DATABASE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secrets
-              key: db
+              name: kubernetes-secrets
+              key: DATABASE_PASSWORD
