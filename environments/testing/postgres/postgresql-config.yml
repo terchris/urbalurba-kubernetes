@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-config
+data:
+  postgresql.conf: |
+    # Custom PostgreSQL configurations here
+  pg_hba.conf: |
+    # Custom client authentication configuration here

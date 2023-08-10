@@ -1,0 +1,10 @@
+# push to kubernetes using: microk8s kubectl apply -f common/shared-config/global-configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: global-config
+data:
+  DATABASE_NAME: urbalurba_db
+  DATABASE_USERNAME: strapi
+  PGADMIN_DEFAULT_EMAIL: your-email@example.com
+  PGADMIN_DEFAULT_PASSWORD: your-password
