@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pgadmin
+  namespace: urbalurba  # Add namespace
   labels:
     app: pgadmin
 spec:
@@ -22,13 +23,16 @@ spec:
         envFrom:
           - configMapRef:
               name: global-config
+              # Make sure the configmap exists in the namespace or adjust accordingly
           - secretRef:
               name: kubernetes-secrets
+              # Make sure the secrets exist in the namespace or adjust accordingly
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: pgadmin
+  namespace: urbalurba  # Add namespace
 spec:
   selector:
     app: pgadmin

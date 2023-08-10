@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: global-config
+  namespace: urbalurba
 data:
   DATABASE_NAME: urbalurba_db
   DATABASE_USERNAME: strapi
