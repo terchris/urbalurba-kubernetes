@@ -15,91 +15,92 @@ spec:
         app: urbalurba-server
     spec:
       containers:
-       - name: urbalurba-server
-         image: ghcr.io/terchris/urbalurba-server:latest
-          env:
-          - name: HOST
-            valueFrom:
-              configMapKeyRef:
-                name: global-config
-                key: HOST
-          - name: PORT
-            value: "1337"
-          - name: APP_KEYS
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: APP_KEYS
-          - name: API_TOKEN_SALT
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: API_TOKEN_SALT
-          - name: ADMIN_JWT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: ADMIN_JWT_SECRET
-          - name: TRANSFER_TOKEN_SALT
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: TRANSFER_TOKEN_SALT
-          - name: DATABASE_HOST
-            value: postgres
-          - name: DATABASE_PORT
-            value: 5432
-          - name: DATABASE_CLIENT
-            value: postgres
-          - name: DATABASE_NAME
-            valueFrom:
-              configMapKeyRef:
-                name: global-config
-                key: DATABASE_NAME
-          - name: DATABASE_USERNAME
-            valueFrom:
-              configMapKeyRef:
-                name: global-config
-                key: DATABASE_USERNAME
-          - name: DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: DATABASE_PASSWORD
-          - name: DATABASE_SSL
-            valueFrom:
-              configMapKeyRef:
-                name: global-config
-                key: DATABASE_SSL
-          - name: JWT_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: JWT_SECRET
-          - name: NODE_ENV
-            valueFrom:
-              configMapKeyRef:
-                name: global-config
-                key: NODE_ENV
-          - name: URBALURBA_ADMIN_EMAIL
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: URBALURBA_ADMIN_EMAIL
-          - name: URBALURBA_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: URBALURBA_ADMIN_PASSWORD
-          - name: GITHUB_ACCESS_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: kubernetes-secrets
-                key: GITHUB_ACCESS_TOKEN
+      - name: urbalurba-server
+        image: ghcr.io/terchris/urbalurba-server:latest
+        env:
+        - name: HOST
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: HOST
+        - name: PORT
+          value: "1337"
+        - name: APP_KEYS
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: APP_KEYS
+        - name: API_TOKEN_SALT
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: API_TOKEN_SALT
+        - name: ADMIN_JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: ADMIN_JWT_SECRET
+        - name: TRANSFER_TOKEN_SALT
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: TRANSFER_TOKEN_SALT
+        - name: DATABASE_HOST
+          value: postgres
+        - name: DATABASE_PORT
+          value: "5432"
+        - name: DATABASE_CLIENT
+          value: postgres
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_NAME
+        - name: DATABASE_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_USERNAME
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: DATABASE_PASSWORD
+        - name: DATABASE_SSL
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: DATABASE_SSL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: JWT_SECRET
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: global-config
+              key: NODE_ENV
+        - name: URBALURBA_ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: URBALURBA_ADMIN_EMAIL
+        - name: URBALURBA_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: URBALURBA_ADMIN_PASSWORD
+        - name: GITHUB_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kubernetes-secrets
+              key: GITHUB_ACCESS_TOKEN
         ports:
-          - containerPort: 1337
+        - containerPort: 1337
       imagePullSecrets:
-        - name: ghcr-secret
+      - name: ghcr-secret
+
 ---
 apiVersion: v1
 kind: Service
