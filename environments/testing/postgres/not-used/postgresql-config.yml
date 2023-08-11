@@ -1,3 +1,4 @@
+# file postgresql-config.yml
 apiVersion: v1
 kind: ConfigMap
 metadata:

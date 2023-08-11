@@ -1,3 +1,4 @@
+# file postgresql-statefulset.yml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
