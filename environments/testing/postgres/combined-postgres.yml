@@ -4,6 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgresql-config
+  namespace: urbalurba  # Add namespace
 data:
   postgresql.conf: |
     # Custom PostgreSQL configurations here
@@ -16,6 +17,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgresql-pvc
+  namespace: urbalurba  # Add namespace
 spec:
   accessModes:
     - ReadWriteOnce
@@ -75,6 +77,7 @@ spec:
   volumeClaimTemplates:
   - metadata:
       name: postgres-data
+      namespace: urbalurba  # Add namespace
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
