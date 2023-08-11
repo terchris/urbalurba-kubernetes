@@ -9,7 +9,7 @@ data:
   DATABASE_NAME: urbalurba_db
   DATABASE_USERNAME: strapi
   HOST: macaroni # what host is assigned by k8s?
-  DATABASE_SSL: false
+  DATABASE_SSL: "false"
   NODE_ENV: production
 
 
