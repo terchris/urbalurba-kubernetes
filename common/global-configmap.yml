@@ -8,4 +8,23 @@ data:
   POSTGRES_USER: postgres
   DATABASE_NAME: urbalurba_db
   DATABASE_USERNAME: strapi
+  HOST: macaroni # what host is assigned by k8s?
+  DATABASE_SSL: false
+  NODE_ENV: production
+
+
 # push to kubernetes using: microk8s kubectl apply -f common/shared-config/global-configmap.yml
+
+
+
+
+
+# these can be changed
+#default DATABASE_POOL_MAX=10 - setting higher number because all jobs (47) are querying the megeJobs to check if they can start
+#DATABASE_POOL_MAX=10
+#DATABASE_POOL_MIN tarn doc says "It is recommended to set min: 0 so all idle connections can be terminated."
+#DATABASE_POOL_MIN=2
+#default DATABASE_CONNECTION_TIMEOUT=60000
+#DATABASE_CONNECTION_TIMEOUT=60000
+#for knex debuggging can be knex:client / knex:* 
+#DEBUG=knex:client
