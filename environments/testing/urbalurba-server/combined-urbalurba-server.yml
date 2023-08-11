@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
        - name: urbalurba-server
-        image: ghcr.io/terchris/urbalurba-server:latest
+         image: ghcr.io/terchris/urbalurba-server:latest
         env:
         - name: HOST
           valueFrom:
